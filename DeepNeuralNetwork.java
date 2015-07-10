@@ -17,8 +17,8 @@ class DeepNeuralNetwork
         ArrayList<Integer> in = new ArrayList<Integer>(3);
         in.add(1); in.add(0); in.add(1);
 
-        double threshold = 0.1;
-        int out = 1;
+        double threshold = 0.5;  // てきとー
+        int out = 0;
 
         Neuron neuron = new Neuron(1, weight, threshold);
         neuron.input(in);
