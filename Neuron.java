@@ -1,3 +1,10 @@
+// -------------------------------------------------------------------------------
+// Name:        	Neuron.java
+// Author:      	Utahka.A
+// Created:     	Jul 10th, 2015
+// Last Date:   	Jul 11th, 2015
+// Note:
+// -------------------------------------------------------------------------------
 import java.util.ArrayList;
 import java.util.Random;
 
