@@ -15,9 +15,9 @@ public class NN01{
 
 
 	public NN01(int input_size,
-				int hidden_layer_size,
-				int output_size,
-				Random rand){
+			int hidden_layer_size,
+			int output_size,
+			Random rand){
 
 		this.rand = rand;
 		this.input_size = input_size;
@@ -67,31 +67,84 @@ public class NN01{
 		//********************************************
 	}
 
-	public
+	public void finetune(int[][] Train_X,
+						int[][] Train_Y,
+						int n_ins,
+						int train_N){
+		
+		// イテレーション
+		for(int N = 0; N < train_N; N++){
+			// データ数
+			for(int data_num = 0; data_num < n_ins; data_num++){
+	
+				for(int i = 0; i < this.input_size; i++){
+					this.n_ins[i] = Train_X[data_num][i];
+				}
 
-	public void random_put(){
-		for(int i = 0; i < this.input_size; i++){
-			for(int j = 0; j < this.hidden_layer_size; j++){
-				System.out.println(i + "-" + j + ": " + W_ih[i][j]);
 			}
 		}
 	}
 
-	public static void main(String[] args){
+	// Sigmoid function
+	public static double sigmoid(double x){
+		return 1.0 / (1.0 + Math.pow(Math.E, -x));
+	}
+
+	public static void test_nn(){
 		Random rand = new Random(123);
-		int input_size = 3;
+
+		// モデルサイズ
+		int input_size = 10;
 		int hidden_layer_size = 10;
 		int output_size = 2;
-	//	double[] array = {2.0, 2.0};
 
-		System.out.println("hello!!");
+		// イテレーション
+		int data_num = 10;
+		int train_N = 10;
 		
+		// モデル
 		NN01 nn01 = new NN01(input_size,
 							hidden_layer_size,
 							output_size,
 							rand);
 
-		nn01.random_put();
-		
+		// 学習データ
+		int[][] Train_X = {
+			{1,1,1,1,1,0,0,0,0,0},
+			{1,1,0,1,1,0,0,0,0,0},
+			{1,1,1,1,1,0,0,0,0,0},
+			{1,0,1,1,1,0,0,0,0,0},
+			{1,1,1,1,1,0,0,0,0,0},
+			{0,0,0,0,0,1,1,1,1,1},
+			{0,0,0,0,0,1,0,1,1,1},
+			{0,0,0,0,0,1,1,1,1,1},
+			{0,0,0,0,0,1,1,1,0,1},
+			{0,0,0,0,0,1,1,1,1,1}
+		}
+
+		// 教師データ
+		int[][] Train_Y = {
+			{1,0},
+			{1,0},
+			{1,0},
+			{1,0},
+			{1,0},
+			{0,1},			
+			{0,1},			
+			{0,1},			
+			{0,1},			
+			{0,1}
+		}
+
+		// 学習
+		nn01.finetune(Train_X, Train_Y, data_num, train_N);
+
+
 	}
+
+	public static void main(String[] args){
+		test_nn();
+
+	}
+
 }
