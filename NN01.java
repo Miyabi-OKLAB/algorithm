@@ -14,10 +14,7 @@ public class NN01{
 	public double[] T_o;
 
 
-	public NN01(int input_size,
-			int hidden_layer_size,
-			int output_size,
-			Random rand){
+	public NN01(int input_size, int hidden_layer_size, int output_size, Random rand){
 
 		this.rand = rand;
 		this.input_size = input_size;
@@ -67,10 +64,7 @@ public class NN01{
 		//********************************************
 	}
 
-	public void finetune(int[][] Train_X,
-						int[][] Train_Y,
-						int n_ins,
-						int train_N){
+	public void finetune(int[][] Train_X, int[][] Train_Y, int n_ins, int train_N){
 		
 		// イテレーション
 		for(int N = 0; N < train_N; N++){
@@ -103,10 +97,7 @@ public class NN01{
 		int train_N = 10;
 		
 		// モデル
-		NN01 nn01 = new NN01(input_size,
-							hidden_layer_size,
-							output_size,
-							rand);
+		NN01 nn01 = new NN01(input_size, hidden_layer_size, output_size, rand);
 
 		// 学習データ
 		int[][] Train_X = {
