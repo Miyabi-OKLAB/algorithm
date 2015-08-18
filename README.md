@@ -43,10 +43,12 @@ int out = neuron.output();
 #### Aug 11th
 - Neuronオブジェクトのidをint型じゃなくてマトリックスにしないと、ネットワーク構築が面倒！
 ***
+
 #### Aug 16th
 - Aug 11th の問題は解決
-- NetworkクラスのinitLayerメソッド難航中
+- NetworkクラスのinitLayerメソッド難航中
 ***
+
 #### Aug 19th
 - Aug 16th の問題は解決
 - Networkクラスの雛形完成
