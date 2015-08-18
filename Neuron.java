@@ -2,46 +2,85 @@
 // Name:        	Neuron.java
 // Author:      	Utahka.A
 // Created:     	Jul 10th, 2015
-// Last Date:   	Jul 11th, 2015
+// Last Date:   	Aug 11th, 2015
 // Note:
 // -------------------------------------------------------------------------------
+// package algorithm.Neuron;
+
 import java.util.ArrayList;
-import java.util.Random;
+import java.lang.Math;
 
-class Neuron
+public class Neuron
 {
-    // member variable
-    private Random rand;
-    private int id, inputSize;              // ID
-    private ArrayList<Float> weight;        // 重みつけ
-    private double threshold;               // しきい値
-    private double sum;                     // 和
-    private ArrayList<Integer> in;          // input
-    private int out;                        // output
+    /*
+        ** Field **
+        - id:           各ニューロンのid ---> matrix で表現
+        - inputsize:    前の層のニューロンの数 重みつけベクトルや入力ベクトルのサイズ
+        - weight:       重みつけベクトル
+        - in:           入力ベクトル
+        - threshold:    閾値
+        - sum:          和
+    */
+    private ArrayList<Integer> id;
+    private int inputSize;
+    private ArrayList<Double> weight;
+    private ArrayList<Integer> in;
+    private double threshold;
+    private double sum;
 
-    // コンストラクタ1
-    Neuron(int id, ArrayList<Float> weight, double threshold)
+    /*
+        ** コンストラクタ for Input Layer **
+        - 入力される値は必ず 1 値
+        - weight, threshold を指定する Ver.
+    */
+    public Neuron(ArrayList<Integer> id)
     {
         this.id = id;
-        this.weight = weight;
-        this.threshold = threshold;
+
+        this.weight = new ArrayList<Double>(1);
+        this.weight.add(1.0);
+        this.threshold = 0.0;
+
         this.inputSize = this.weight.size();
         this.sum = 0;
     }
 
-    // コンストラクタ2
-    // 未完成
-    Neuron(int id)
+    /*
+        ** コンストラクタ for Hidden and Output Layer **
+        - ランダムで weight と threshold を決定
+    */
+    public Neuron(ArrayList<Integer> id, int inputSize)
     {
-        this.rand = new Random();
-        this.threshold = 0;
         this.id = id;
+        this.weight = new ArrayList<Double>(inputSize);
+        this.inputSize = inputSize;
+
+        this.setThreshold();
+        this.setWeight();
     }
 
-    // ランダムセット
-    public void setThreshold()
+    @Override
+    public String toString()
     {
-        this.threshold = rand.nextInt(10) + 1;
+        String result = "Neuron(id:" + this.id.toString()
+                      + " input size:" + String.valueOf(this.inputSize)
+                      + ")";
+        return result;
+    }
+
+    // threshold のランダムセット
+    private void setThreshold()
+    {
+        this.threshold = Math.random();
+    }
+
+    // weight のランダムセット
+    private void setWeight()
+    {
+        for (int i = 0; i <= this.inputSize; i++)
+        {
+            this.weight.add(new Double(Math.random()));
+        }
     }
 
     // しきい値を Get
@@ -50,11 +89,15 @@ class Neuron
         return this.threshold;
     }
 
-    public void input(ArrayList<Integer> data)
+    /*
+        ** 入力用メソッド **
+        - 入力ベクトルの要素の重みつき和をとる
+    */
+    public void input(ArrayList<Integer> inputVector)
     {
-        if (data.size() == this.inputSize)
+        if (inputVector.size() == this.inputSize)
         {
-            this.in = data;
+            this.in = inputVector;
             this.summation();
         }
         else
@@ -63,9 +106,15 @@ class Neuron
         }
     }
 
+    public void input(int inputValue)
+    {
+        this.sum += inputValue;
+    }
+
     /*
         ** 入力の重みつけ和計算 **
-        inputメソッド中でのみ呼びだし
+        - inputメソッド中でのみ呼びだし
+        - やっていることは入力ベクトルと重みベクトルの内積を取っているだけ
     */
     private void summation()
     {
@@ -75,16 +124,18 @@ class Neuron
         }
     }
 
+    /*
+        ** 出力用メソッド **
+        - 重みつき和と閾値を比べて出力を判定
+    */
     public int output()
     {
         if (this.sum > this.threshold)
         {
-            this.out = 1;
             return 1;
         }
         else
         {
-            this.out = 0;
             return 0;
         }
     }

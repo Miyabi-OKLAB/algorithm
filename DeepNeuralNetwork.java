@@ -2,21 +2,25 @@
 // Name:        	DeepNeuralNetwork.java
 // Author:      	Utahka.A
 // Created:     	Jul 10th, 2015
-// Last Date:   	Jul 11th, 2015
+// Last Date:   	Aug 11th, 2015
 // Note:
 // -------------------------------------------------------------------------------
 import java.util.ArrayList;
-// aaaaaaaa
+
 class DeepNeuralNetwork
 {
+    /* ** Example(1) **
     public static void main(String[] args)
     {
+        // 重み係数の設定
         ArrayList<Float> weight = new ArrayList<Float>(3);
         weight.add(new Float(0.5)); weight.add(new Float(0.5)); weight.add(new Float(0.5));
 
+        // 入力ベクトルの設定
         ArrayList<Integer> in = new ArrayList<Integer>(3);
         in.add(1); in.add(0); in.add(1);
 
+        // 閾値の設定
         double threshold = 0.5;  // てきとー
         int out = 0;
 
@@ -26,4 +30,34 @@ class DeepNeuralNetwork
 
         System.out.println(out);
     }
+    */
+
+    /* ** Example(2) **
+    public static void main(String[] args)
+    {
+        ArrayList<Integer> in = new ArrayList<Integer>(3);
+        in.add(1); in.add(0); in.add(1);
+
+        ArrayList<Integer> id = Network.mkID(0, 0);
+
+        Neuron neuron = new Neuron(id, 3);
+        neuron.input(in);
+        System.out.println(neuron.output());
+    }
+    */
+
+    //
+    public static void main(String[] args)
+    {
+        ArrayList<Integer> networkDesign = new ArrayList<Integer>(3);
+        networkDesign.add(3); networkDesign.add(10); networkDesign.add(2);
+
+        ArrayList<Integer> in = new ArrayList<Integer>(3);
+        in.add(1); in.add(0); in.add(1);
+
+        Network network = new Network(networkDesign);
+        network.input(in);
+        System.out.println(network.output());
+    }
+    //
 }

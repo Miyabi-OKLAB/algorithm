@@ -1,6 +1,7 @@
 import java.util.Random;
 
-public class NN01{
+public class NN01
+{
 	public Random rand;
 	public int input_size;
 	public int hidden_layer_size;
@@ -14,11 +15,8 @@ public class NN01{
 	public double[] T_o;
 
 
-	public NN01(int input_size,
-				int hidden_layer_size,
-				int output_size,
-				Random rand){
-
+	public NN01(int input_size, int hidden_layer_size, int output_size, Random rand)
+	{
 		this.rand = rand;
 		this.input_size = input_size;
 		this.hidden_layer_size = hidden_layer_size;
@@ -37,10 +35,16 @@ public class NN01{
 		this.T_o = new double[output_size];
 
 		// random
-		if(rand == null)	this.rand = new Random(123);
-		else				this.rand = rand;
+		if(rand == null)
+		{
+			this.rand = new Random(123);
+		}
+		else
+		{
+			this.rand = rand;
+		}
 
-		//********************************************		
+		//********************************************
 		// Weight random
 		// in - hid
 		for(int i = 0; i < input_size; i++){
@@ -60,14 +64,14 @@ public class NN01{
 		for(int i = 0; i < hidden_layer_size; i++){
 			T_h[i] = rand.nextDouble();
 		}
-		// out		
+		// out
 		for(int i = 0; i < output_size; i++){
 			T_o[i] = rand.nextDouble();
 		}
 		//********************************************
 	}
 
-	public
+	//public
 
 	public void random_put(){
 		for(int i = 0; i < this.input_size; i++){
@@ -85,13 +89,13 @@ public class NN01{
 	//	double[] array = {2.0, 2.0};
 
 		System.out.println("hello!!");
-		
+
 		NN01 nn01 = new NN01(input_size,
 							hidden_layer_size,
 							output_size,
 							rand);
 
 		nn01.random_put();
-		
+
 	}
 }
