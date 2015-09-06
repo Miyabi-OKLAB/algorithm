@@ -2,11 +2,9 @@
 // Name:        	Neuron.java
 // Author:      	Utahka.A
 // Created:     	Jul 10th, 2015
-// Last Date:   	Aug 11th, 2015
+// Last Date:   	Sep  7th, 2015
 // Note:
 // -------------------------------------------------------------------------------
-// package algorithm.Neuron;
-
 import java.util.ArrayList;
 import java.lang.Math;
 
@@ -59,13 +57,20 @@ public class Neuron
         this.setWeight();
     }
 
+    public static Neuron mkNeuron(ArrayList<Integer> id, int inputSize)
+    {
+        return new Neuron(id, inputSize);
+    }
+
+    public static Neuron mkNeuronForInputLayer(ArrayList<Integer> id)
+    {
+        return new Neuron(id);
+    }
+
     @Override
     public String toString()
     {
-        String result = "Neuron(id:" + this.id.toString()
-                      + " input size:" + String.valueOf(this.inputSize)
-                      + ")";
-        return result;
+        return "Neuron(id:" + this.id.toString() + " input size:" + String.valueOf(this.inputSize) + ")";
     }
 
     // threshold のランダムセット
@@ -130,13 +135,6 @@ public class Neuron
     */
     public int output()
     {
-        if (this.sum > this.threshold)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
+        return  this.sum > this.threshold ? 1 : 0;
     }
 }

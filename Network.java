@@ -2,10 +2,9 @@
 // Name:        	Network.java
 // Author:      	Utahka.A
 // Created:     	Jul 10th, 2015
-// Last Date:   	Aug 18th, 2015
+// Last Date:   	Sep  7th, 2015
 // Note:            - コメントなど、よくわからない場合には連絡ください (Aug 05th, 2015)
 // -------------------------------------------------------------------------------
-// package algorithm.Network;
 import java.util.ArrayList;
 
 public class Network
@@ -35,16 +34,17 @@ public class Network
         this.networkSizeList = networkSizeList;
         this.howManyLayer = this.networkSizeList.size();
         this.outputVector = new ArrayList<Integer>();
-        this.initLayer();
     }
 
-    private void initLayer()
+    public static Network make(ArrayList<Integer> networkSizeList)
     {
+        Network network = new Network(networkSizeList);
+
         ArrayList<Integer> id = new ArrayList<Integer>(2);
-        this.networklayer = new ArrayList<ArrayList<Neuron>>(this.howManyLayer);
-        for (int i = 0; i < this.howManyLayer; i++)
+        network.networklayer = new ArrayList<ArrayList<Neuron>>(network.howManyLayer);
+        for (int i = 0; i < network.howManyLayer; i++)
         {
-            int size = this.networkSizeList.get(i);
+            int size = network.networkSizeList.get(i);
             ArrayList<Neuron> sub = new ArrayList<Neuron>(size);
             id.add(i);
             for (int j = 0; j < size; j++)
@@ -56,14 +56,25 @@ public class Network
                 }
                 else
                 {
-                    sub.add(new Neuron(new ArrayList<Integer>(id), this.networkSizeList.get(i-1)));
+                    sub.add(new Neuron(new ArrayList<Integer>(id), network.networkSizeList.get(i-1)));
                 }
                 id.remove(1);
             }
-            this.networklayer.add(new ArrayList<Neuron>(sub));
+            network.networklayer.add(new ArrayList<Neuron>(sub));
             sub.clear();
             id.clear();
         }
+        return network;
+    }
+
+    public static ArrayList<Integer> mkVector(int[] arr)
+    {
+        ArrayList<Integer> arrList = new ArrayList<Integer>(arr.length);
+        for (int element: arr)
+        {
+            arrList.add(element);
+        }
+        return new ArrayList<Integer>(arrList);
     }
 
     public void printNetwork()
