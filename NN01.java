@@ -13,7 +13,6 @@ public class NN01{
 	public double[] T_h;
 	public double[] T_o;
 
-
 	public NN01(int input_size, int hidden_layer_size, int output_size, Random rand){
 
 		this.rand = rand;
