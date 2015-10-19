@@ -15,6 +15,15 @@ http://qiita.com/kenmatsu4/items/7b8d24d4c5144a686412
 
 fetch_mldata はwebからデータを取得する
 
+追記
+
+どうやら，input_sizeは256が限界っぽい・・・
+
+ヘルプみー
+上記の参考サイトでは784次元を入力しているが以下のコードでの900次元はエラーが出る
+
+まぁ，一応力ずくで256でやっても認識率は問題ない
+
 """
 import matplotlib.pyplot as plt 	# グラフ出したりする時に
 from sklearn.datasets import fetch_mldata	# データ入力の時使う
@@ -22,6 +31,7 @@ import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
 import sys
+
 
 # ミニバッチのサイズを定義
 # データサイズに合わせて調整してあげるといいよ！
@@ -33,16 +43,16 @@ batchsize	= 5
 n_epoch		= 50
 
 # モデルの各素子数
-input_size	= 100
-hidden_size	= 200
-output_size	= 2
+input_size	= 256
+hidden_size	= 300
+output_size	= 3
 
 # インプットするデータを設定
 # インプットするデータを用意
 
 # データファイルの名前を設定
-FILENAME_train = 'data/train/train.csv'
-FILENAME_teach = 'data/teach/teach.csv'
+FILENAME_train = 'data/testdata02/train/rand_train.csv'
+FILENAME_teach = 'data/testdata02/teach/rand_teach.csv'
 
 # テスト↓
 # 2と7の２値データ.txtファイルを各5データずつ
@@ -51,7 +61,7 @@ f_train = np.loadtxt(FILENAME_train, delimiter = ',', dtype = np.float32)
 f_teach = np.loadtxt(FILENAME_teach, delimiter = ',', dtype = np.int32)
 
 # 学習に用いるデータ数
-N = 10
+N = 25
 # データをそれぞれ学習に使うやつとテストに使うやつにわけるよ
 # 上で定義したN個は，全データが100データあった場合その中のNデータを
 # 学習に使い，残りのデータを評価用に使う．
