@@ -23,7 +23,6 @@ fetch_mldata はwebからデータを取得する
 上記の参考サイトでは784次元を入力しているが以下のコードでの900次元はエラーが出る
 
 まぁ，一応力ずくで256でやっても認識率は問題ない
-
 """
 import matplotlib.pyplot as plt 	# グラフ出したりする時に
 from sklearn.datasets import fetch_mldata	# データ入力の時使う
@@ -40,28 +39,32 @@ batchsize	= 5
 # 学習の繰り返し回数
 # ミニバッチとこの回数のため，
 # 最終的なイテレーションはミニバッチxエポック
-n_epoch		= 50
+n_epoch		= 30
 
 # モデルの各素子数
-input_size	= 256
-hidden_size	= 300
-output_size	= 3
+input_size	= 900
+hidden_size	= 400
+output_size	= 5
 
 # インプットするデータを設定
 # インプットするデータを用意
 
 # データファイルの名前を設定
-FILENAME_train = 'data/testdata02/train/rand_train.csv'
-FILENAME_teach = 'data/testdata02/teach/rand_teach.csv'
+print 'input file datasets'
+FILENAME_train = 'data/testdata03/train/train.csv'
+FILENAME_teach = 'data/testdata03/teach/teach.csv'
 
 # テスト↓
 # 2と7の２値データ.txtファイルを各5データずつ
-# train -> float, teach -> int
+# 学習データ ( -> float)
 f_train = np.loadtxt(FILENAME_train, delimiter = ',', dtype = np.float32)
+# f_train /= 255
+
+# 教師データ ( -> int)
 f_teach = np.loadtxt(FILENAME_teach, delimiter = ',', dtype = np.int32)
 
 # 学習に用いるデータ数
-N = 25
+N = 50
 # データをそれぞれ学習に使うやつとテストに使うやつにわけるよ
 # 上で定義したN個は，全データが100データあった場合その中のNデータを
 # 学習に使い，残りのデータを評価用に使う．
@@ -80,7 +83,8 @@ model = FunctionSet(l1 = F.Linear(input_size, hidden_size),
 
 # ニューラルネットワークの構造
 # ドロップアウト使う
-# 活性化関数にReLU関数
+# 活性化関数にReLU関数(F.sigmoidもある)
+# 256の件ここら辺怪しい
 def forward(x_data, y_data, train=True):
 	x, t = Variable(x_data), Variable(y_data)
 	h1 = F.dropout(F.relu(model.l1(x)),  train = train)
@@ -93,7 +97,7 @@ def forward(x_data, y_data, train=True):
 # アダムは適切なパラメタが決まっているから簡単
 # そのかわり乱数でズラしまくって最適解を見つける欲張りアダム
 optimizer = optimizers.Adam()
-optimizer.setup(model.collect_parameters())
+optimizer.setup(model)
 
 # 初期化
 train_loss 	= []
@@ -104,7 +108,6 @@ test_acc	= []
 l1_W = []
 l2_W = []
 l3_W = []
-
 
 # イテレーション
 for epoch in xrange(1, n_epoch+1):
@@ -157,10 +160,11 @@ for epoch in xrange(1, n_epoch+1):
 	l2_W.append(model.l2.W)
 	l3_W.append(model.l3.W)
 
-"""
-・最後に全ての出力層の出力をデータごとに表示する
-・グラフにプロットして分かりやすくする(acc, loss)
-"""
+#
+#・最後に全ての出力層の出力をデータごとに表示する
+#・グラフにプロットして分かりやすくする(acc, loss)
+#
+
 for i in xrange(0, N_test, 1):
 	x_batch = x_test[i:i+1]
 	h1 = F.dropout(F.relu(model.l1(Variable(x_batch))), train = False)
@@ -183,12 +187,3 @@ plt.plot(range(len(test_loss)), test_loss, "r")
 plt.legend(["train_loss", "test_loss"], loc = 1)
 plt.title("Loss of digit recognition.")
 plt.show()
-
-
-
-
-
-
-
-
-
