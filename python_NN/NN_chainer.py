@@ -34,16 +34,16 @@ import sys
 
 # ミニバッチのサイズを定義
 # データサイズに合わせて調整してあげるといいよ！
-batchsize	= 5
+batchsize	= 2
 
 # 学習の繰り返し回数
 # ミニバッチとこの回数のため，
 # 最終的なイテレーションはミニバッチxエポック
-n_epoch		= 30
+n_epoch		= 20
 
 # モデルの各素子数
 input_size	= 900
-hidden_size	= 400
+hidden_size	= 1000
 output_size	= 5
 
 # インプットするデータを設定
