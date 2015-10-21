@@ -34,6 +34,9 @@ def function():
 
 	# 1/10にする（300x300 -> 30x30）
 	img = (img[::10, ::10] + img[1::10, ::10] + img[::10, 1::10] + img[1::10, 1::10])/4
+	img = (img[::2, ::2] + img[1::2, ::2] + img[::2, 1::2] + img[1::2, 1::2])/4
+	plt.imshow(img)
+	plt.show()
 
 	f = open(binariName, "w")
 
