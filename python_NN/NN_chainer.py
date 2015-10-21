@@ -13,16 +13,6 @@ http://qiita.com/kenmatsu4/items/7b8d24d4c5144a686412
 
 結果表示と読み込みの部分をいじった
 
-fetch_mldata はwebからデータを取得する
-
-追記
-
-どうやら，input_sizeは256が限界っぽい・・・
-
-ヘルプみー
-上記の参考サイトでは784次元を入力しているが以下のコードでの900次元はエラーが出る
-
-まぁ，一応力ずくで256でやっても認識率は問題ない
 """
 import matplotlib.pyplot as plt 	# グラフ出したりする時に
 from sklearn.datasets import fetch_mldata	# データ入力の時使う
@@ -34,7 +24,7 @@ import sys
 
 # ミニバッチのサイズを定義
 # データサイズに合わせて調整してあげるといいよ！
-batchsize	= 2
+batchsize	= 5
 
 # 学習の繰り返し回数
 # ミニバッチとこの回数のため，
@@ -50,6 +40,7 @@ output_size	= 5
 # インプットするデータを用意
 
 # データファイルの名前を設定
+
 print 'input file datasets'
 FILENAME_train = 'data/testdata03/train/train.csv'
 FILENAME_teach = 'data/testdata03/teach/teach.csv'
