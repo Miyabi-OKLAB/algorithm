@@ -77,7 +77,7 @@ public class Network
         return new ArrayList<Integer>(arrList);
     }
 
-    public void printNetwork()
+    public void cat()
     {
         for (ArrayList<Neuron> layer: this.networklayer)
         {
