@@ -15,44 +15,50 @@ http://qiita.com/kenmatsu4/items/7b8d24d4c5144a686412
 
 """
 import matplotlib.pyplot as plt 	# グラフ出したりする時に
-from sklearn.datasets import fetch_mldata	# データ入力の時使う
+from sklearn.datasets import fetch_mldata	# データ入力の時使う(使うとは言ってない)
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
 import sys
-
+import csv
+import six
+import six.moves.cPickle as pickle
 
 # ミニバッチのサイズを定義
 # データサイズに合わせて調整してあげるといいよ！
-batchsize	= 5
+batchsize	= 50
 
 # 学習の繰り返し回数
 # ミニバッチとこの回数のため，
 # 最終的なイテレーションはミニバッチxエポック
-n_epoch		= 20
+n_epoch		= 10
 
 # モデルの各素子数
 input_size	= 900
-hidden_size	= 1000
+hidden_size	= 500
 output_size	= 5
 
 # インプットするデータを設定
 # インプットするデータを用意
 
 # データファイルの名前を設定
-
+#	dataディレクトリ: data/FileData_class*/
+#	file名形式: train, teach >> *.csv
+#	
+#	
+#
 print 'input file datasets'
-FILENAME_train = 'data/testdata03/train/train.csv'
-FILENAME_teach = 'data/testdata03/teach/teach.csv'
+FILENAME_train = 'data/FileData_class50/train.csv'
+FILENAME_teach = 'data/FileData_class50/teach.csv'
 
 # テスト↓
 # 2と7の２値データ.txtファイルを各5データずつ
 # 学習データ ( -> float)
-f_train = np.loadtxt(FILENAME_train, delimiter = ',', dtype = np.float32)
+f_train = np.loadtxt(FILENAME_train, delimiter=',', dtype=np.float32)
 # f_train /= 255
 
 # 教師データ ( -> int)
-f_teach = np.loadtxt(FILENAME_teach, delimiter = ',', dtype = np.int32)
+f_teach = np.loadtxt(FILENAME_teach, delimiter=',', dtype=np.int32)
 
 # 学習に用いるデータ数
 N = 50
@@ -63,23 +69,22 @@ N = 50
 x_train, x_test = np.split(f_train, [N])
 y_train, y_test = np.split(f_teach, [N])
 N_test = y_test.size
-
+#print("x_test: "), str(x_test)
 # モデル設定
 # 層を増やしたいやんちゃボーイはここをいじるといいよぉ
 # *.Linear は全結合NNのことです（活性化関数はここじゃない）
-model = FunctionSet(l1 = F.Linear(input_size, hidden_size),
-					l2 = F.Linear(hidden_size, hidden_size),
-					l3 = F.Linear(hidden_size, output_size))
+model = FunctionSet(l1=F.Linear(input_size, hidden_size),
+					l2=F.Linear(hidden_size, hidden_size),
+					l3=F.Linear(hidden_size, output_size))
 
 
 # ニューラルネットワークの構造
 # ドロップアウト使う
 # 活性化関数にReLU関数(F.sigmoidもある)
-# 256の件ここら辺怪しい
 def forward(x_data, y_data, train=True):
 	x, t = Variable(x_data), Variable(y_data)
-	h1 = F.dropout(F.relu(model.l1(x)),  train = train)
-	h2 = F.dropout(F.relu(model.l2(h1)), train = train)
+	h1 = F.dropout(F.relu(model.l1(x)),  train=train)
+	h2 = F.dropout(F.relu(model.l2(h1)), train=train)
 	y = model.l3(h2)
 
 	return F.softmax_cross_entropy(y, t), F.accuracy(y, t)
@@ -144,37 +149,65 @@ for epoch in xrange(1, n_epoch+1):
 		sum_loss	 += float(cuda.to_cpu(loss.data)) * batchsize
 		sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
 
-	print 'test mean loss = {}, accuracy = {}'.format(sum_loss / N_test, sum_accuracy / N_test)
+	print 'test mean loss = {}, accuracy = {}'.format(sum_loss/N_test, sum_accuracy/N_test)
 
 	# ここまでのパラメタを保存する
 	l1_W.append(model.l1.W)
 	l2_W.append(model.l2.W)
 	l3_W.append(model.l3.W)
 
+# 重みのデータ
+#print("out1: "), str(model.l1.W)
+#print("out2: "), str(model.l2.W)
+#print("out3: "), str(model.l3.W)
+
+print str(l3_W)
+
+# Save data
+with open('l1w.csv', 'w') as f:
+	writer = csv.writer(f, lineterminator='\n')
+	writer.writerows(model.l1.W)
+#	writer.writerows(array2d)
 #
+with open('l2w.csv', 'w') as f:
+	writer = csv.writer(f, lineterminator='\n')
+	writer.writerows(model.l2.W)
+#	writer.writerows(array2d)
 #・最後に全ての出力層の出力をデータごとに表示する
+with open('l3w.csv', 'w') as f:
+	writer = csv.writer(f, lineterminator='\n')
+	writer.writerows(model.l3.W)
+	
+#	writer.writerows(array2d)
 #・グラフにプロットして分かりやすくする(acc, loss)
 #
 
 for i in xrange(0, N_test, 1):
 	x_batch = x_test[i:i+1]
-	h1 = F.dropout(F.relu(model.l1(Variable(x_batch))), train = False)
-	h2 = F.dropout(F.relu(model.l2(h1)), train = False)
+	h1 = F.dropout(F.relu(model.l1(Variable(x_batch))), train=False)
+	h2 = F.dropout(F.relu(model.l2(h1)), train=False)
 	y = model.l3(h2)
 	print 'Output: ' + str(y.data)
 
+#print str(x_batch)
+
 # グラフに表示(acc)
-plt.figure(figsize = (8, 6))
+plt.figure(figsize=(8, 6))
 plt.plot(range(len(train_acc)), train_acc)
 plt.plot(range(len(test_acc)), test_acc, "r")
-plt.legend(["train_acc", "test_acc"], loc = 4)
+plt.legend(["train_acc", "test_acc"], loc=4)
 plt.title("Accuracy of digit recognition.")
 plt.show()
 
 # グラフに表示(loss)
-plt.figure(figsize = (8, 6))
+plt.figure(figsize=(8, 6))
 plt.plot(range(len(train_loss)), train_loss)
 plt.plot(range(len(test_loss)), test_loss, "r")
-plt.legend(["train_loss", "test_loss"], loc = 1)
+plt.legend(["train_loss", "test_loss"], loc=1)
 plt.title("Loss of digit recognition.")
 plt.show()
+
+model.to_cpu()
+with open('model.pkl', 'wb') as o:
+	pickle.dump(model, o)
+
