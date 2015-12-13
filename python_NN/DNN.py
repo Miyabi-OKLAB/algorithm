@@ -151,6 +151,10 @@ def test_DeepLearning():
 	plt.title("Loss of digit recognition.")
 	plt.show()
 	
+	model.to_cpu()
+	with open('model.pkl', 'wb') as o:
+		pickle.dump(model, o)
+
 	
 def discrimination():
 	# parameters
