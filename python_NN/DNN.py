@@ -166,7 +166,7 @@ def discrimination():
 	h_units2	= 500
 	output_size	= 5
 	
-	in_data = 'data/dis/data4.csv'
+	in_data = 'data/dis/data1.csv'
 	in_data = np.loadtxt(in_data, delimiter=',', dtype=np.float32)
 	in_data2d = in_data[np.newaxis, :]
 
@@ -177,7 +177,24 @@ def discrimination():
 	h1 = F.dropout(F.relu(model.l1(Variable(in_data))), train=False)
 	h2 = F.dropout(F.relu(model.l2(h1)), train=False)
 	y = model.l3(h2)
-	print 'Output: ' + str(y.data)
+	
+	out_class = y.data
+	
+	out_class_max = max(out_class)
+
+	print 'Output: ' + str(out_class)
+	print 'Max index: ' + str(np.argmax(out_class))
+	
+	f = open('out.txt', 'w')
+	for i in range(output_size):
+		if i == np.argmax(out_class):
+			f.writelines('1')
+		else:
+			f.writelines('0')
+	
+	f.close()
+		
+		
 
 if __name__ == "__main__":
 	# test_DeepLearning()
