@@ -32,9 +32,7 @@ def data_read(train, teach, N):
 
 # Model definition
 def model_design(inData, hidData1, hidData2, outData):
-	model = chainer.FunctionSet(l1=F.Linear(inData, hidData1), 
-								l2=F.Linear(hidData1, hidData2),
-								l3=F.Linear(hidData2, outData))
+	model = chainer.FunctionSet(l1=F.Linear(inData, hidData1), l2=F.Linear(hidData1, hidData2), l3=F.Linear(hidData2, outData))
 	return model
 
 # Main function
@@ -106,8 +104,7 @@ def test_DeepLearning():
 			sum_loss	 += float(cuda.to_cpu(loss.data)) * batchsize
 			sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
 			
-			print 'train mean loss = {}, accuracy = {}'.format(sum_loss/N, 
-															   sum_accuracy/N)
+			print 'train mean loss = {}, accuracy = {}'.format(sum_loss/N, sum_accuracy/N)
 																															
 			sum_accuracy = 0
 			sum_loss	 = 0
@@ -121,8 +118,7 @@ def test_DeepLearning():
 				sum_loss	 += float(cuda.to_cpu(loss.data)) * batchsize
 				sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
 				
-			print 'test mean loss = {}, accuracy = {}'.format(sum_loss/N_test, 
-															  sum_accuracy/N_test)
+			print 'test mean loss = {}, accuracy = {}'.format(sum_loss/N_test, sum_accuracy/N_test)
 			
 			l1_W.append(model.l1.W)
 			l2_W.append(model.l2.W)
@@ -155,7 +151,6 @@ def test_DeepLearning():
 	with open('model.pkl', 'wb') as o:
 		pickle.dump(model, o)
 
-	
 def discrimination():
 	# parameters
 	batchsize	= 25
@@ -179,7 +174,6 @@ def discrimination():
 	y = model.l3(h2)
 	
 	out_class = y.data
-	
 	out_class_max = max(out_class)
 
 	print 'Output: ' + str(out_class)
@@ -191,10 +185,7 @@ def discrimination():
 			f.writelines('1')
 		else:
 			f.writelines('0')
-	
 	f.close()
-		
-		
 
 if __name__ == "__main__":
 	# test_DeepLearning()
