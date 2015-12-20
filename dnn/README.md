@@ -4,9 +4,9 @@ Neural Network
 - このreadmeはアキバくんが書いたreadmeがかっこよかったので書きたかっただけ（ゆるして）
 
 ## Documentation
-### python_NN
-一度コード内でも説明しているが書きたいのでここでも説明する  
-
+### makeModel.py
+- 識別学習のためのモデル構築を行うコード
+- 学習後にモデルデータを吐き出す
 - 使用する際には主に以下のパラメタを変更する
 ```python
 batchsize   = num
@@ -20,3 +20,13 @@ output_size = num
 - epochは小分けにしたデータを学習すること  
 - itelationは全体の学習データを学習すること  
 つまり，epoch * batch が itelation になる  
+
+### classification.py
+- 識別を行うコード
+- input.csvを読み込みoutput.txtを吐き出す
+- パラメタはmakeModel.pyに合わせてあげて
+
+### p4j.java
+- javaからclassification.pyを実行させるコード
+- そのままp4jを呼び出してあげればpythonが動く
+- 秋葉くんありがとう:wq
